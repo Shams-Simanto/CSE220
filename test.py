@@ -1,0 +1,116 @@
+# print("hello")
+# print ("h", end="a")
+
+# a=complex(input())
+# a="1"
+
+# print(type(a))
+
+# str= "abc"
+# str2=str+"def"
+# str3=str[:3]+"xyz"
+# print(str)
+# print(str2)
+# print(str3)
+
+# #pragma GCC optimize("O3")
+# #pragma GCC target("avx2, bmi, bmi2, lzcnt, popcnt")
+# static const bool __boost = [](){
+#     cin.tie(nullptr);
+#     cout.tie(nullptr);
+#     return ios_base::sync_with_stdio(false);
+# }();
+
+# dict={
+#     "a" :1,
+#     "b": 2
+# }
+# print(dict["b"])
+# print ("""aaa""")
+
+# for index in range(5, 20, 2):
+#     print("Value:",index,end="")
+# l = list(range(10))
+# # print("Value:",l,end="")
+# print(l[-2])
+# print(6 not in l)
+
+# from collections import deque
+# dq = deque()
+
+# dq.append(12)
+# print(dq)
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+from typing import Tuple
+
+INF = 8
+
+def plot(
+        signal, 
+        title=None, 
+        y_range=(-1, 3), 
+        figsize = (8, 3),
+        x_label='n (Time Index)',
+        y_label='x[n]',
+        saveTo=None
+    ):
+    plt.figure(figsize=figsize)
+    plt.xticks(np.arange(-INF, INF + 1, 1))
+    
+    y_range = (y_range[0], max(np.max(signal), y_range[1]) + 1)
+    # set y range of 
+    plt.ylim(*y_range)
+    plt.stem(np.arange(-INF, INF + 1, 1), signal)
+    plt.title(title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.grid(True)
+    if saveTo is not None:
+        plt.savefig(saveTo)
+    plt.show()
+
+def init_signal():
+    return np.zeros(2 * INF + 1)
+
+
+def time_reverse_signal(x : np.ndarray) -> np.ndarray:
+    # implement this function
+    negated=x[::-1]
+    return negated
+    None
+
+def odd_even_decomposition(x : np.ndarray)->Tuple[np.ndarray, np.ndarray]:
+    # implement this function
+    # you can return 2 values from function in the following way
+    # return value1, value2
+    return (x+time_reverse_signal(x))/2, (x-time_reverse_signal(x))/2
+    None
+
+def main():
+    img_root_path = '.'
+    signal = init_signal()
+    signal[INF] = 1
+    signal[INF+1] = .5
+    signal[INF-1] = 2
+    signal[INF + 2] = 1
+    signal[INF - 2] = .5
+
+    plot(signal, title='Original Signal(x[n])', saveTo=f'{img_root_path}/x[n].png')
+    reversed = time_reverse_signal(signal)
+    plot(reversed, title='x[-n]', saveTo=f'{img_root_path}/x[-n].png')
+    plot(time_reverse_signal(reversed), title='x[-(-n)]', saveTo=f'{img_root_path}/x[-(-n)].png')
+    odd_signal, even_signal = odd_even_decomposition(signal)
+    plot(odd_signal, title='Odd Signal(x[n])', saveTo=f'{img_root_path}/x_odd[n].png')
+    plot(even_signal, title='Even Signal(x[n])', saveTo=f'{img_root_path}/x_even[n].png')
+
+
+main()
+
+
+
+
+
+
